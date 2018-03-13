@@ -22,10 +22,14 @@
       <!-- เพิ่ม --> <link href="https://fonts.googleapis.com/css?family=Maitree|Trirong" rel="stylesheet">
 </head>
 <body class="Backg-body">
-<header>
-			<div class="navbar-header center width ">
-				<h1 class="font-color-w font-th"> ชุมชน <strong>ธ.นำธรรมดี  </strong><a><img class="img" src="img/Logo2.png" alt="Logo2"></a></h1>
-        <button type="button" class="right btn btn-link color-bl">Sign In</button>
+<!-- แก้ไข -->
+<header class="header_Bg">
+			<div class="navbar-header width">
+                <img class="img left" src="img/Logo1.png" alt="Logo1">
+                <spen class="right">
+                    <div><a class="btn-link" href="#">Sign In</a></div>
+                    <div><a class="btn-link" href="register.php">Register</a></div>
+                </spen>
 			</div>
 				
 		</header>
@@ -33,16 +37,18 @@
      <nav id="mainnav">
       <div class="width">
           <ul>
-             <li class="dropdown">
-                <button class="dropbtn"><a href="index.php">Home</a></button>
-                <div class="dropdown-content">
-                    <a href="#">News &amp; Announcement</a>
-                </div>
-              </li>
-        </ul>
+              <li class="selected-item"><a href="index.php">Home</a></li>
+              <li><a href="news_form.php">News and Announcements</a></li>
+              <li><a href="#">Knowledge sources</a></li>
+              <li><a href="#">Events</a></li>
+              <li><a href="#">About us</a></li>
+              <li><a href="#">Profile</a></li>
+          </ul>
+          <div class="clear"></div>
         <div class="clear"></div>
       </div>
-    </nav>  
+    </nav> 
+    <!-- end แก้ไข -->
     <section id="main-slider" class="navbar-body no-margin">
     <div id="myCarousel" class=" carousel slide " data-ride="carousel">
         <ol class="carousel-indicators">

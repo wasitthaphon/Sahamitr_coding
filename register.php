@@ -1,7 +1,55 @@
 
 <?php
   require('connect.php');
+  if(isset($_POST['submit'])){
 
+
+
+    $name = $_POST['name'];
+    $surname = $_POST['surname'];
+    $n_id = $_POST['national-id'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $birth_date = $_POST['birth-date'];
+
+    $first_q = $_POST['first-question'];
+    $second_q = $_POST['second-question'];
+    $third_q = $_POST['third-question'];
+
+    $first_a = $_POST['first-answer'];
+    $second_a = $_POST['second-answer'];
+    $third_a = $_POST['third-answer'];
+
+
+    $file = $_FILES['file'];
+    print_r($file);
+    $filename = $file['name'];
+    $file_ext = strtolower(end(explode('.', $filename)));
+    $file_name_new = "";
+
+    $allowed = array('jpg', 'jpeg', 'png', 'pdf');
+    if(in_array($file_ext, $allowed)){
+      if($file['error'] === 0){
+        if($filw['size'] < 5000){
+          $newfilename = uniqid('', true).".".$file_ext;
+          $file_name_new = $newfilename;
+          $file_destination = 'uploads/'.$newfilename;
+          $sql_str = "INSERT INTO user VALUES (NULL, '$name', '$surname', '$n_id', '$file_name_new', '$username', '$password', '$birth_date', '$first_q', '$first_a', '$second_q', '$second_a', '$third_q', '$third_a')";
+          $conn->exec($sql_str);
+          move_uploaded_file($file['tmp_name'], $file_destination);
+          echo "<script><alert> Success </alert></script>";
+          header("Location: register.php?success");
+        }else{
+          echo "<script><alert> Size too many </alert></script>";
+        }
+      }else{
+        echo "<script><alert> Error! </alert></script>";
+      }
+    }else{
+      echo "<script><alert> Wrong file extension </alert><script>";
+    }
+
+  }
 
 ?>
 
@@ -22,30 +70,38 @@
       <!-- เพิ่ม --> <link href="https://fonts.googleapis.com/css?family=Maitree|Trirong" rel="stylesheet">
 </head>
 <body class="Backg-body">
-  <header>
-    <div class="navbar-header center width ">
-      <h1 class="font-color-w font-th"> ชุมชน <strong>ธ.นำธรรมดี  </strong><a><img class="img" src="img/Logo2.png" alt="Logo2"></a></h1>
-      <button type="button" class="right btn btn-link color-bl">Sign In</button>
-    </div>      
-  </header>
 
-  <nav id="mainnav">
-    <div class="width">
-      <ul>
-        <li class="dropdown">
-          <button class="dropbtn"><a href="index.php">Home</a></button>
-          <div class="dropdown-content">
-            <a href="#">News &amp; Announcement</a>
-          </div>
-        </li>
-      </ul>
-      <div class="clear"></div>
-    </div>
-  </nav>  
+  <main role="main">
+   <!-- แก้ไข -->
+<header class="header_Bg">
+      <div class="navbar-header width">
+        <img class="img left" src="img/Logo1.png" alt="Logo1">
+        <spen class="right">
+            <div><a class="btn-link" href="#">Sign In</a></div>
+            <div><a class="btn-link" href="register.php">Register</a></div>
+        </spen>
+      </div>
+        
+    </header>
+
+     <nav id="mainnav">
+      <div class="width">
+          <ul>
+              <li><a href="index.php">Home</a></li>
+              <li><a href="news_form.php">News and Announcements</a></li>
+              <li><a href="#">Knowledge sources</a></li>
+              <li><a href="#">Events</a></li>
+              <li><a href="#">About us</a></li>
+              <li><a href="#">Profile</a></li>
+          </ul>
+          <div class="clear"></div>
+        <div class="clear"></div>
+      </div>
+    </nav> 
   <div class="register_container">
     <h3 style="text-align: center; margin-top: 2rem;">สมัครสมาชิก</h3><br><br>
 
-    <form id="register_form" class="font-Tri" method="post">
+    <form id="register_form" class="font-Tri" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label for="name">ชื่อ</label>
         <input type="text" class="form-control" name="name" id="name" aria-describedby="name-help" placeholder="ชื่อ" required >
@@ -66,7 +122,10 @@
 
       <!-- Copy national id file -->
       <div class="form-group">
-        <h3>COPY NATIONAL ID FILE.</h3>
+        <label for="file-upload">อัปโหลดไฟล์สำเนาบัตรประชาชน</label>
+        <input type="file" name="file" class="form-control-file" id="file-upload" aria-describedby="upload-help"
+        placeholder="สำเนาบัตรประชาชน" required>
+        <small id="upload-help" class="form-text text-muted">Test text.</small>
       </div>
 
       <div class="form-group">
@@ -77,7 +136,7 @@
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="text" class="form-control" name="password" id="password" aria-describedby="password-help" placeholder="password" required>
+        <input type="text" class="form-control" name="password" id="password" aria-describedby="password-help" placeholder="password" pattern="[A-Za-z0-9]{5,16}" required>
         <small id="password-help" class="form-text text-muted">Test text.</small>
       </div>
 
@@ -90,7 +149,7 @@
       <div class="form-row form-group">
         <div class="col-6">
           <label for="first-question">โปรดเลือกคำถาม</label>
-          <select class="custom-select">
+          <select class="custom-select" name="first-question">
             <option selected value="1">ฮีโร่สุดโปรดของคุณชื่ออะไร</option>
             <option value="2">เพื่อบ้านคนแรกของคุณชื่ออะไร</option>
           </select>
@@ -105,7 +164,7 @@
       <div class="form-row form-group">
         <div class="col-6">
           <label for="second-question">โปรดเลือกคำถาม</label>
-          <select class="custom-select">
+          <select class="custom-select" name="second-question">
             <option selected value="1">ฮีโร่สุดโปรดของคุณชื่ออะไร</option>
             <option value="2">เพื่อบ้านคนแรกของคุณชื่ออะไร</option>
           </select>
@@ -120,7 +179,7 @@
       <div class="form-row form-group">
         <div class="col-6">
           <label for="third-question">โปรดเลือกคำถาม</label>
-          <select class="custom-select">
+          <select class="custom-select" name="third-question">
             <option selected value="1">ฮีโร่สุดโปรดของคุณชื่ออะไร</option>
             <option value="2">เพื่อบ้านคนแรกของคุณชื่ออะไร</option>
           </select>
@@ -137,7 +196,7 @@
         <h3>CAPTCHA HERE!.</h3>
         <!--<div class="g-recaptcha" data-sitekey="6LeFFEoUAAAAAF9UrPwP4u5vejhL7NgmwSIypK-X"></div>-->
         <br><br>
-        <button id="submit" class="btn btn-primary">สมัครสมาชิก</button>
+        <button id="submit" class="btn btn-primary" name="submit">สมัครสมาชิก</button>
       </center>
     </form>
   </div>

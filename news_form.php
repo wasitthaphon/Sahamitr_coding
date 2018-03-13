@@ -1,6 +1,11 @@
 <?php
   require('connect.php');
-  $c_id = $_GET['id'];
+   
+  if(isset($_GET['id'])){
+     $c_id = $_GET['id'];
+  }else{
+    $c_id = 1;
+  }
   $sql = "SELECT * FROM news WHERE id = $c_id";
   $result = ($conn->query($sql))->fetch();
 
@@ -32,25 +37,33 @@
 <body class="Backg-body">
 
   <main role="main">
-   <header>
-			<div class="navbar-header center width ">
-				<h1 class="font-color-w font-th"> ชุมชน <strong>ธ.นำธรรมดี  </strong><a><img class="img" src="img/Logo2.png" alt="Logo2"></a></h1>
-        <button type="button" class="right btn btn-link color-bl">Sign In</button>
-			</div>	
+   <!-- แก้ไข -->
+<header class="header_Bg">
+			<div class="navbar-header width">
+        <img class="img left" src="img/Logo1.png" alt="Logo1">
+        <spen class="right">
+            <div><a class="btn-link" href="#">Sign In</a></div>
+            <div><a class="btn-link" href="register.php">Register</a></div>
+        </spen>
+			</div>
+				
 		</header>
-    <nav id="mainnav">
+
+     <nav id="mainnav">
       <div class="width">
           <ul>
-            <li class="dropdown">
-            <button class="dropbtn2"><a href="index.php">Home</a></button>
-            <div class="dropdown-content dropbtn">
-              <a href="#">News &amp; Announcement</a>
-            </div>
-           </li>
-        </ul>
+              <li><a href="index.php">Home</a></li>
+              <li class="selected-item" ><a href="news_form.php">News and Announcements</a></li>
+              <li><a href="#">Knowledge sources</a></li>
+              <li><a href="#">Events</a></li>
+              <li><a href="#">About us</a></li>
+              <li><a href="#">Profile</a></li>
+          </ul>
+          <div class="clear"></div>
         <div class="clear"></div>
       </div>
-    </nav>  
+    </nav> 
+    <!-- end แก้ไข -->
     
     <div class="container font-Tri" style="margin-top: 5rem; color: black;" >
     	<h3 class="text-center " style="font-weight: bold;">
@@ -73,12 +86,16 @@
 		<div class="container row font-Tri" style="margin-top: 5rem">
         <div class="previos-news text-left col">
           <?php
-            echo "<a id=\"prev\" href=\"news_form.php?id=". $previous["id"]. "\">". $previous["title"]. "</a>";
+            if(isset($previous['title'])){
+              echo "<a id=\"prev\" href=\"news_form.php?id=". $previous["id"]. "\">"."Previous". "</a>";
+            }
           ?>
         </div>
         <div class="next-news text-right col">
           <?php
-            echo "<a id=\"next\" href=\"news_form.php?id=". $next["id"]. "\">". $next["title"]. "</a>";
+            if(isset($next['title'])){
+              echo "<a id=\"next\" href=\"news_form.php?id=". $next["id"]. "\">". "Next". "</a>";
+            }
           ?>
         </div>
       </div>
