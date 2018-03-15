@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2018 at 03:15 PM
+-- Generation Time: Mar 15, 2018 at 03:09 PM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -132,6 +132,37 @@ INSERT INTO `pic` (`id`, `name`, `is_img_slider`, `id_news`) VALUES
 (54, '1.jpg', 1, 30),
 (55, '2.jpg', 0, 30);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `name` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `surname` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `national_id` varchar(13) COLLATE utf8_unicode_ci NOT NULL,
+  `copy_file_name` varchar(300) COLLATE utf8_unicode_ci NOT NULL,
+  `username` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `birthday` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `question_1_id` int(11) NOT NULL,
+  `answer_1` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `question_2_id` int(11) NOT NULL,
+  `answer_2` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `question_3_id` int(11) NOT NULL,
+  `answer_3` varchar(200) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `name`, `surname`, `national_id`, `copy_file_name`, `username`, `password`, `birthday`, `question_1_id`, `answer_1`, `question_2_id`, `answer_2`, `question_3_id`, `answer_3`) VALUES
+(1, 'วสิษฐพล', 'นุคิด', '1409901443690', 'untitle.pdf', 'ppl_can_fly', 'BeerWasitthaphon1', '06/06/1996', 0, 'Batman', 5, 'KhonKaen', 10, '99'),
+(2, 'วสิษฐพล', 'นุคิด', '1234567890123', '5aa7f69362a546.46918825.jpg', 'wasitthaphon', 'nukid', '1996-06-06', 1, 'A', 1, 'B', 1, 'C');
+
 --
 -- Indexes for dumped tables
 --
@@ -150,6 +181,12 @@ ALTER TABLE `pic`
   ADD KEY `id_news_foreign_id` (`id_news`);
 
 --
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -163,6 +200,11 @@ ALTER TABLE `news`
 --
 ALTER TABLE `pic`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- Constraints for dumped tables
 --

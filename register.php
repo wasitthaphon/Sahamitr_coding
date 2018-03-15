@@ -3,31 +3,44 @@
   require('connect.php');
   if(isset($_POST['submit'])){
 
+    $err = array(
+      "err_occurred" => 0,
+      "f_name" => "",
+      "l_name" => "",
+      "code_id" => "",
+      "copy_file" => "",
+      "username" => "",
+      "password" => "",
+      "birth_date" => "",
+      "answer_1" => "",
+      "answer_2" => "",
+      "answer_3" => "",
+      "email" => "",
+    );
+    $illegal = "#$%^&*()+=[]';,./{}|:<>?~";
+
+    //First name check
+    if(isset($_POST['name'])){
+      if(strpbrk($_POST['name'], $illegal)){
+        $err['f_name'] = "Special character is not allowed except \'-\' or \'_\'";
+      }
+    }
+
+    //Last name check
+    if(isset($_POST['surname'])){
+      if(strpbrk($_POST['surname'], $illegal)){
+        $err['l_name'] = "Special character is not allowed except \'-\' or \'_\'";
+      }
+    }
 
 
-    $name = $_POST['name'];
-    $surname = $_POST['surname'];
-    $n_id = $_POST['national-id'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $birth_date = $_POST['birth-date'];
-
-    $first_q = $_POST['first-question'];
-    $second_q = $_POST['second-question'];
-    $third_q = $_POST['third-question'];
-
-    $first_a = $_POST['first-answer'];
-    $second_a = $_POST['second-answer'];
-    $third_a = $_POST['third-answer'];
-
-
+    //File check
     $file = $_FILES['file'];
-    print_r($file);
     $filename = $file['name'];
     $file_ext = strtolower(end(explode('.', $filename)));
     $file_name_new = "";
 
-    $allowed = array('jpg', 'jpeg', 'png', 'pdf');
+    $allowed = array('jpg', 'jpeg', 'png');
     if(in_array($file_ext, $allowed)){
       if($file['error'] === 0){
         if($filw['size'] < 5000){
@@ -48,6 +61,31 @@
     }else{
       echo "<script><alert> Wrong file extension </alert><script>";
     }
+
+
+    
+
+
+
+    $name = $_POST['name'];
+    $surname = $_POST['surname'];
+    $n_id = $_POST['national-id'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $birth_date = $_POST['birth-date'];
+
+    $first_q = $_POST['first-question'];
+    $second_q = $_POST['second-question'];
+    $third_q = $_POST['third-question'];
+
+    $first_a = $_POST['first-answer'];
+    $second_a = $_POST['second-answer'];
+    $third_a = $_POST['third-answer'];
+
+
+
+
+    
 
   }
 
@@ -73,15 +111,14 @@
 
   <main role="main">
    <!-- แก้ไข -->
-<header class="header_Bg">
+    <header class="header_Bg">
       <div class="navbar-header width">
         <img class="img left" src="img/Logo1.png" alt="Logo1">
         <spen class="right">
             <div><a class="btn-link" href="#">Sign In</a></div>
             <div><a class="btn-link" href="register.php">Register</a></div>
         </spen>
-      </div>
-        
+      </div>   
     </header>
 
      <nav id="mainnav">
@@ -102,108 +139,170 @@
     <h3 style="text-align: center; margin-top: 2rem;">สมัครสมาชิก</h3><br><br>
 
     <form id="register_form" class="font-Tri" method="post" enctype="multipart/form-data">
+
+      <!-- First name -->
       <div class="form-group">
-        <label for="name">ชื่อ</label>
-        <input type="text" class="form-control" name="name" id="name" aria-describedby="name-help" placeholder="ชื่อ" required >
-        <small id="name-help" class="form-text text-muted">Test text.</small>
+        <div class="row">
+          <label for="name" style="margin-top: 5px;">First name</label>
+          <div class="col">
+            <input type="text" class="form-control row" name="name" id="name" aria-describedby="name-help" autocomplete="no" required >
+            <small id="name-help" class="form-text text-muted row">Test text.</small>
+          </div>
+        </div>
       </div>
 
+      <!-- Last name -->
       <div class="form-group">
-        <label for="surname">นามสกุล</label>
-        <input type="text" class="form-control" name="surname" id="surname" aria-describedby="surname-help" placeholder="นามสกุล" required>
-        <small id="surname-help" class="form-text text-muted">Test text.</small>
+        <div class="row">
+          <label for="surname" style="margin-top: 5px;">Last name</label>
+          <div class="col">
+            <input type="text" class="form-control row" name="surname" id="surname" aria-describedby="surname-help" autocomplete="no" required>
+           <small id="surname-help" class="form-text text-muted row">Test text.</small>
+         </div>
+        </div>
       </div>
 
+      <!-- passport-id or national-id -->
       <div class="form-group">
-        <label for="national-id">เลขบัตรประชาชน</label>
-        <input type="text" class="form-control" name="national-id" id="national-id" aria-describedby="national-id-help" placeholder="เลขบัตรประชาชน" required>
-        <small id="national-id-help" class="form-text text-muted">Test text.</small>
+        <div class="row">
+          <label for="code-id" style="margin-top: 0px;">National ID or <br> passport ID</label>
+          <div class="col">
+            <input type="text" class="form-control row" name="code-id" id="code-id" aria-describedby="code-id-help" autocomplete="no" required>
+            <small id="code-id-help" class="form-text text-muted row">Test text.</small>
+          </div>
+        </div>
       </div>
 
-      <!-- Copy national id file -->
-      <div class="form-group">
-        <label for="file-upload">อัปโหลดไฟล์สำเนาบัตรประชาชน</label>
+      <!-- Copy national-id or passport-id file -->
+      <div class="form-group" style="margin-top: 10px;">
+        <label for="file-upload">Copy national ID or passport ID file</label>
         <input type="file" name="file" class="form-control-file" id="file-upload" aria-describedby="upload-help"
-        placeholder="สำเนาบัตรประชาชน" required>
+        required>
         <small id="upload-help" class="form-text text-muted">Test text.</small>
       </div>
 
+
+      <!-- username -->
       <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" name="username" id="username" aria-describedby="username-help" placeholder="username" required>
-        <small id="username-help" class="form-text text-muted">Test text.</small>
+        <div class="row">
+          <label for="username" style="margin-top: 5px;">Username</label>
+          <div class="col">
+            <input type="text" class="form-control row" name="username" id="username" aria-describedby="username-help" placeholder="username" required>
+            <small id="username-help" class="form-text text-muted row">Test text.</small>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- password -->
+      <div class="form-group">
+        <div class="row">
+          <label for="password" style="margin-top: 5px;">Password</label>
+          <div class="col">
+            <input type="text" class="form-control row" name="password" id="password" aria-describedby="password-help" placeholder="password" pattern="[A-Za-z0-9]{5,16}" required>
+            <small id="password-help" class="form-text text-muted row">Test text.</small>
+          </div>
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="password">Password</label>
-        <input type="text" class="form-control" name="password" id="password" aria-describedby="password-help" placeholder="password" pattern="[A-Za-z0-9]{5,16}" required>
-        <small id="password-help" class="form-text text-muted">Test text.</small>
+        <div class="row">
+          <label for="birth-date" style="margin-top: 5px">Birth date</label>
+          <div class="col">
+            <input type="date" class="form-control row" name="birth-date" id="birth-date" aria-describedby="birth-date-help" placeholder="birth date" required>
+            <small id="birth-date-help" class="form-text text-muted row">Test text.</small>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="birth-date">วัน/เดือน/ปีเกิด</label>
-        <input type="date" class="form-control" name="birth-date" id="birth-date" aria-describedby="birth-date-help" placeholder="birth date" required>
-        <small id="birth-date-help" class="form-text text-muted">Test text.</small>
-      </div>
-
+      <!-- First question -->
       <div class="form-row form-group">
         <div class="col-6">
-          <label for="first-question">โปรดเลือกคำถาม</label>
+          <label for="first-question">Please select one question</label>
           <select class="custom-select" name="first-question">
+
+            <!-- insert question here -->
             <option selected value="1">ฮีโร่สุดโปรดของคุณชื่ออะไร</option>
             <option value="2">เพื่อบ้านคนแรกของคุณชื่ออะไร</option>
+
           </select>
         </div>
+
+        <!-- First answer -->
         <div class="col-6">
-          <label for="first-answer">คำตอบของท่าน</label>
-          <input type="text" class="form-control" name="first-answer" id="first-answer" placeholder="คำตอบของคุณคือ" required>
+          <label for="first-answer">Answer</label>
+          <input type="text" class="form-control" name="first-answer" id="first-answer" autocomplete="no" required>
         </div>
         <small id="first-question-answer-help" class="form-text text-muted">Test text.</small>
       </div>
 
+      <!-- Second question and answer -->
       <div class="form-row form-group">
         <div class="col-6">
-          <label for="second-question">โปรดเลือกคำถาม</label>
+          <label for="second-question">Please select one question</label>
           <select class="custom-select" name="second-question">
+
+            <!-- insert question here -->
             <option selected value="1">ฮีโร่สุดโปรดของคุณชื่ออะไร</option>
             <option value="2">เพื่อบ้านคนแรกของคุณชื่ออะไร</option>
+
           </select>
         </div>
+
+        <!-- Second answer -->
         <div class="col-6">
-          <label for="second-answer">คำตอบของท่าน</label>
-          <input type="text" class="form-control" name="second-answer" id="second-answer" placeholder="คำตอบของคุณคือ" required>
+          <label for="second-answer">Answer</label>
+          <input type="text" class="form-control" name="second-answer" id="second-answer" autocomplete="no" required>
         </div>
         <small id="second-question-answer-help" class="form-text text-muted">Test text.</small>
       </div>
 
+      <!-- Third question -->
       <div class="form-row form-group">
         <div class="col-6">
-          <label for="third-question">โปรดเลือกคำถาม</label>
+          <label for="third-question">Please select one question</label>
           <select class="custom-select" name="third-question">
+
+            <!-- insert question here -->
             <option selected value="1">ฮีโร่สุดโปรดของคุณชื่ออะไร</option>
             <option value="2">เพื่อบ้านคนแรกของคุณชื่ออะไร</option>
+
           </select>
         </div>
+
+        <!-- Third answer -->
         <div class="col-6">
-          <label for="third-answer">คำตอบของท่าน</label>
-          <input type="text" class="form-control" name="third-answer" id="birth-date" placeholder="คำตอบของคุณคือ" required>
+          <label for="third-answer">Answer</label>
+          <input type="text" class="form-control" name="third-answer" id="birth-date" autocomplete="no" required>
         </div>
         <small id="third-question-answer-help" class="form-text text-muted">Test text.</small>
       </div>
 
+      <!-- email -->
+      <div class="form-group" style="margin-top: 20px;">
+        <div class="row">
+          <label for="email" style="margin-top: 5px;">Email</label>
+          <div class="col">
+            <input type="text" class="form-control row" name="email" id="email" aria-describedby="email-help" autocomplete="no" required >
+            <small id="email-help" class="form-text text-muted row">Test text.</small>
+          </div>
+        </div>
+      </div>
+
+
 
       <center>
-        <h3>CAPTCHA HERE!.</h3>
-        <!--<div class="g-recaptcha" data-sitekey="6LeFFEoUAAAAAF9UrPwP4u5vejhL7NgmwSIypK-X"></div>-->
+        <!-- Agreement -->
+        <input type="checkbox" name="accept-agreement" value="1" required> I agree <a href="#" style="text-decoration: none;">Policy<a>
         <br><br>
-        <button id="submit" class="btn btn-primary" name="submit">สมัครสมาชิก</button>
+        <button id="submit" class="btn btn-primary" name="submit">Register</button>
       </center>
     </form>
   </div>
 
 
 
-  <footer id="footer" class="text-center">
+  <footer id="footer" class="text-center" style="margin-top: 3rem;">
     <div class="font-color1"> Copyright &copy; <span class="font-s1">ชุมชน ธ.นำธรรมดี </span> </div>
     <div class="font-color1"> saharuthi_j@kkumail.com </div>
   </footer>
